@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(name = "servicio-productos")
+@FeignClient(name = "servicios-productos")
 public interface ProductosClienteRest {
 
     @GetMapping("/list")
-    public List<Producto> listar();
+    List<Producto> listar();
 
     @GetMapping("/list/{id}")
-    public Producto detalle(@PathVariable Long id);
+    Producto detalle(@PathVariable Long id);
 }
