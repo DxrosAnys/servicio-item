@@ -1,23 +1,17 @@
 package com.formacionbdi.springboot.app.item.controllers;
 
+import com.formacionbdi.springboot.app.commons.models.entity.Producto;
 import com.formacionbdi.springboot.app.item.models.Item;
-import com.formacionbdi.springboot.app.item.models.Producto;
 import com.formacionbdi.springboot.app.item.models.service.ItemService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.ribbon.proxy.annotation.Hystrix;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +24,8 @@ public class ItemController {
 
     private final Environment env;
 
-    @Qualifier("serviceFeign") //  @Qualifier("serviceTemplate")
+    //  @Qualifier("serviceFeign")
+    // @Qualifier("serviceTemplate")
     private final ItemService itemService;
 
     @Value("${configuration.text}")
@@ -77,5 +72,23 @@ public class ItemController {
         json.put("autor.email", env.getProperty("configuration.autor.email"));
 
         return new ResponseEntity<Map<String, String>>(json, HttpStatus.OK);
+    }
+
+    @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Producto create(@RequestBody Producto producto){
+        return itemService.save(producto);
+    }
+
+    @PutMapping("/edit/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Producto edit(@PathVariable("id") Long id, @RequestBody Producto producto){
+        return itemService.update(id, producto);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("id") Long id){
+        itemService.delete(id);
     }
 }
