@@ -15,9 +15,4 @@ public class AppConfig {
         return new RestTemplate();
     }
 
-    @Bean("stdUrl")
-    @ConfigurationProperties("server")
-    public Config getUrl(){
-        return new Config();
-    }
 }
